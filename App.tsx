@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Sparkles, Image as ImageIcon, RotateCcw, Zap, Command, MessageSquare } from 'lucide-react';
+import { Sparkles, Image as ImageIcon, RotateCcw, Zap, Command, MessageSquare, Plus } from 'lucide-react';
 import { ImageUploader } from './components/ImageUploader';
 import { ComparisonView } from './components/ComparisonView';
 import { Button } from './components/Button';
@@ -77,9 +77,9 @@ const App: React.FC = () => {
 
   const handlePresetClick = (preset: string) => {
     setPrompt(preset);
-    // Optional: auto-submit on preset click?
-    // Let's focus input so they can edit if needed
-    textareaRef.current?.focus();
+    setTimeout(() => {
+        textareaRef.current?.focus();
+    }, 10);
   };
 
   // Auto-resize textarea
@@ -91,57 +91,53 @@ const App: React.FC = () => {
   }, [prompt]);
 
   return (
-    <div className="flex h-screen bg-gray-950 text-white selection:bg-indigo-500/30">
+    <div className="flex h-screen bg-white text-gray-900">
       {/* Sidebar / Header Area */}
-      <div className="w-80 border-r border-gray-800 bg-gray-900/50 flex flex-col p-6 hidden md:flex">
-        <div className="flex items-center gap-3 mb-8 cursor-pointer" onClick={handleReset}>
-          <div className="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center shadow-lg shadow-indigo-900/50">
-            <Sparkles className="w-6 h-6 text-white" />
-          </div>
-          <div>
-            <h1 className="font-bold text-lg leading-tight">PixelPerfect</h1>
-            <p className="text-xs text-gray-400">AI Image Editor</p>
-          </div>
+      <div className="w-72 border-r border-gray-100 bg-white flex flex-col p-6 hidden md:flex">
+        <div className="flex items-center gap-2 mb-10 cursor-pointer group" onClick={handleReset}>
+          <h1 className="font-display font-bold text-2xl tracking-tight group-hover:opacity-80 transition-opacity">cleanshot.</h1>
         </div>
 
         {appState === AppState.IDLE ? (
-           <div className="flex-1 flex flex-col justify-center text-center text-gray-500 space-y-4">
-              <Zap className="w-12 h-12 mx-auto opacity-20" />
-              <p>Upload an image to unlock AI capabilities</p>
+           <div className="flex-1 flex flex-col justify-center text-center text-gray-400 space-y-4">
+              <div className="w-12 h-12 bg-gray-50 rounded-full flex items-center justify-center mx-auto">
+                <Zap className="w-5 h-5 opacity-40" />
+              </div>
+              <p className="text-sm font-medium">Upload to start editing</p>
            </div>
         ) : (
-          <div className="flex-1 flex flex-col min-h-0">
-             <div className="mb-6">
-                <h3 className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-3 flex items-center">
-                  <Command className="w-3 h-3 mr-2" />
+          <div className="flex-1 flex flex-col min-h-0 animate-fade-in">
+             <div className="mb-8">
+                <h3 className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-4 flex items-center">
                   Quick Actions
                 </h3>
-                <div className="space-y-2">
-                  {PRESET_PROMPTS.slice(0, 4).map((p, idx) => (
+                <div className="space-y-1">
+                  {PRESET_PROMPTS.slice(0, 5).map((p, idx) => (
                     <button
                       key={idx}
                       onClick={() => handlePresetClick(p)}
-                      className="w-full text-left p-3 rounded-lg bg-gray-800/50 hover:bg-gray-800 border border-transparent hover:border-gray-700 text-sm text-gray-300 transition-all duration-200 hover:shadow-md truncate"
+                      className="w-full text-left px-3 py-2.5 rounded-lg hover:bg-gray-50 text-sm text-gray-600 hover:text-gray-900 transition-all duration-200 truncate group flex items-center justify-between"
                       disabled={loading || appState === AppState.REVIEW}
                     >
-                      {p}
+                      <span className="truncate">{p}</span>
+                      <Plus className="w-3 h-3 opacity-0 group-hover:opacity-50" />
                     </button>
                   ))}
                 </div>
              </div>
 
              <div className="mt-auto">
-               <h3 className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-3">Project</h3>
-               <div className="bg-gray-800/30 rounded-xl p-3 border border-gray-800 flex items-center gap-3">
-                 <div className="w-12 h-12 rounded-lg bg-gray-800 overflow-hidden flex-shrink-0">
+               <h3 className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-3">Active Project</h3>
+               <div className="bg-gray-50 rounded-xl p-3 border border-gray-100 flex items-center gap-3">
+                 <div className="w-10 h-10 rounded-lg bg-white overflow-hidden flex-shrink-0 border border-gray-100 shadow-sm">
                    {currentImage && <img src={currentImage.data} className="w-full h-full object-cover" alt="thumbnail" />}
                  </div>
                  <div className="flex-1 min-w-0">
-                   <p className="text-sm font-medium truncate text-gray-200">current_edit.png</p>
-                   <p className="text-xs text-gray-500">{(currentImage?.data.length || 0) > 1024 * 1024 ? 'High Res' : 'Standard'}</p>
+                   <p className="text-sm font-semibold truncate text-gray-900">Image Layer 1</p>
+                   <p className="text-[10px] text-gray-500 font-medium">Original Source</p>
                  </div>
-                 <button onClick={handleReset} className="p-2 hover:bg-gray-700 rounded-lg text-gray-400 hover:text-white transition-colors">
-                   <RotateCcw className="w-4 h-4" />
+                 <button onClick={handleReset} className="p-1.5 hover:bg-gray-200 rounded-md text-gray-400 hover:text-gray-900 transition-colors">
+                   <RotateCcw className="w-3.5 h-3.5" />
                  </button>
                </div>
              </div>
@@ -150,43 +146,38 @@ const App: React.FC = () => {
       </div>
 
       {/* Main Content */}
-      <div className="flex-1 flex flex-col h-full overflow-hidden relative">
+      <div className="flex-1 flex flex-col h-full overflow-hidden relative bg-white">
         {/* Mobile Header */}
-        <div className="md:hidden h-16 border-b border-gray-800 flex items-center px-4 justify-between bg-gray-900">
-           <div className="flex items-center gap-2">
-             <Sparkles className="w-5 h-5 text-indigo-500" />
-             <span className="font-bold">PixelPerfect</span>
+        <div className="md:hidden h-16 border-b border-gray-100 flex items-center px-4 justify-between bg-white z-10">
+           <div className="flex items-center gap-2" onClick={handleReset}>
+             <span className="font-display font-bold text-xl tracking-tight">cleanshot.</span>
            </div>
            {currentImage && (
-             <button onClick={handleReset} className="text-sm text-gray-400">New</button>
+             <button onClick={handleReset} className="text-sm font-medium text-gray-500">New</button>
            )}
         </div>
 
         {/* Workspace */}
-        <div className="flex-1 relative p-4 md:p-8 flex flex-col min-h-0">
+        <div className="flex-1 relative p-4 md:p-10 flex flex-col min-h-0">
           
           {appState === AppState.IDLE && (
             <ImageUploader onImageSelected={handleImageSelected} />
           )}
 
           {(appState === AppState.EDITING || appState === AppState.PROCESSING) && currentImage && (
-             <div className="flex-1 flex items-center justify-center min-h-0 relative">
+             <div className="flex-1 flex items-center justify-center min-h-0 relative mb-8">
                 {/* Main Image Canvas */}
-                <div className="relative max-w-full max-h-full rounded-2xl overflow-hidden shadow-2xl border border-gray-800 bg-[url('https://www.transparenttextures.com/patterns/dark-matter.png')] bg-gray-900">
+                <div className="relative w-full h-full flex items-center justify-center">
                   <img 
                     src={currentImage.data} 
                     alt="Work in progress" 
-                    className={`max-w-full max-h-[70vh] object-contain transition-opacity duration-500 ${loading ? 'opacity-50 blur-sm' : 'opacity-100'}`}
+                    className={`max-w-full max-h-full object-contain rounded-lg shadow-sm transition-all duration-500 ${loading ? 'opacity-30 grayscale blur-sm scale-[0.98]' : 'opacity-100 scale-100'}`}
                   />
+                  
                   {loading && (
                     <div className="absolute inset-0 flex flex-col items-center justify-center z-10">
-                      <div className="relative">
-                        <div className="w-16 h-16 border-4 border-indigo-500/30 border-t-indigo-500 rounded-full animate-spin"></div>
-                        <div className="absolute inset-0 flex items-center justify-center">
-                          <Sparkles className="w-6 h-6 text-indigo-400 animate-pulse" />
-                        </div>
-                      </div>
-                      <p className="mt-4 text-indigo-300 font-medium animate-pulse">Gemini is dreaming...</p>
+                      <div className="w-12 h-12 border-2 border-gray-200 border-t-black rounded-full animate-spin mb-4"></div>
+                      <p className="text-sm font-medium text-gray-500 animate-pulse">Processing changes...</p>
                     </div>
                   )}
                 </div>
@@ -204,58 +195,47 @@ const App: React.FC = () => {
 
           {/* Prompt Bar - Only show when editing/processing */}
           {(appState === AppState.EDITING || appState === AppState.PROCESSING) && (
-            <div className="mt-6 w-full max-w-3xl mx-auto z-20">
+            <div className="w-full max-w-2xl mx-auto z-20">
               {error && (
-                <div className="mb-4 p-3 bg-red-500/10 border border-red-500/20 rounded-lg text-red-400 text-sm flex items-center">
+                <div className="mb-4 p-3 bg-red-50 border border-red-100 rounded-lg text-red-600 text-sm flex items-center">
                    <div className="w-1.5 h-1.5 rounded-full bg-red-500 mr-2"></div>
                    {error}
                 </div>
               )}
               
-              <div className="relative bg-gray-800/80 backdrop-blur-xl border border-gray-700 rounded-2xl p-2 shadow-2xl shadow-black/50 transition-all duration-200 focus-within:border-indigo-500/50 focus-within:ring-1 focus-within:ring-indigo-500/30">
-                 <div className="flex items-end gap-2">
-                    <div className="p-3 text-gray-400">
-                      <MessageSquare className="w-5 h-5" />
+              <div className="relative group">
+                 <div className="absolute -inset-0.5 bg-gradient-to-r from-gray-200 to-gray-100 rounded-2xl opacity-50 blur transition duration-200 group-hover:opacity-75"></div>
+                 <div className="relative bg-white rounded-xl shadow-lg border border-gray-100 flex flex-col overflow-hidden">
+                    <div className="flex items-end p-2 gap-2">
+                        <textarea 
+                        ref={textareaRef}
+                        value={prompt}
+                        onChange={(e) => setPrompt(e.target.value)}
+                        placeholder="Describe your edit..."
+                        className="flex-1 bg-transparent border-none focus:ring-0 resize-none py-3 px-3 text-lg text-gray-900 placeholder-gray-300 font-medium leading-normal outline-none"
+                        rows={1}
+                        disabled={loading}
+                        onKeyDown={(e) => {
+                            if (e.key === 'Enter' && !e.shiftKey) {
+                            e.preventDefault();
+                            handlePromptSubmit();
+                            }
+                        }}
+                        />
+                        <Button 
+                        onClick={handlePromptSubmit} 
+                        disabled={!prompt.trim() || loading}
+                        className="mb-1 rounded-lg"
+                        size="md"
+                        variant="primary"
+                        >
+                        Generate
+                        </Button>
                     </div>
-                    <textarea 
-                      ref={textareaRef}
-                      value={prompt}
-                      onChange={(e) => setPrompt(e.target.value)}
-                      placeholder="Describe how you want to edit this image..."
-                      className="flex-1 bg-transparent border-none text-white placeholder-gray-500 focus:ring-0 resize-none py-3 max-h-32 text-base leading-normal"
-                      rows={1}
-                      disabled={loading}
-                      onKeyDown={(e) => {
-                        if (e.key === 'Enter' && !e.shiftKey) {
-                          e.preventDefault();
-                          handlePromptSubmit();
-                        }
-                      }}
-                    />
-                    <Button 
-                      onClick={handlePromptSubmit} 
-                      disabled={!prompt.trim() || loading}
-                      className="mb-1"
-                    >
-                      Generate
-                    </Button>
-                 </div>
-                 
-                 {/* Suggested Chips (Horizontal Scroll on Mobile) */}
-                 <div className="border-t border-gray-700/50 mt-2 pt-2 px-2 pb-1 flex gap-2 overflow-x-auto no-scrollbar mask-gradient-right">
-                    {PRESET_PROMPTS.map((p, i) => (
-                      <button 
-                        key={i}
-                        onClick={() => handlePresetClick(p)}
-                        className="whitespace-nowrap px-3 py-1 rounded-full bg-gray-700/50 hover:bg-gray-700 text-xs text-gray-300 border border-gray-600/50 transition-colors flex-shrink-0"
-                      >
-                        {p.length > 30 ? p.substring(0, 30) + '...' : p}
-                      </button>
-                    ))}
                  </div>
               </div>
-              <p className="text-center text-xs text-gray-500 mt-3">
-                Powered by Gemini 2.5 Flash Image ("Nano Banana")
+              <p className="text-center text-[10px] uppercase tracking-widest text-gray-400 mt-4 font-medium">
+                Powered by Gemini 2.5 Flash Image Nano Banana
               </p>
             </div>
           )}

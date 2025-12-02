@@ -3,27 +3,63 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>PixelPerfect AI - Gemini Image Editor</title>
+    <title>cleanshot. - AI Image Editor</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ['Inter', 'sans-serif'], // Used for body, UI text (Geist alternative)
+              display: ['Outfit', 'sans-serif'], // Used for headings, branding
+            },
+            colors: {
+              gray: {
+                50: '#fafafa',
+                100: '#f4f4f5',
+                200: '#e4e4e7',
+                300: '#d4d4d8',
+                400: '#a1a1aa',
+                500: '#71717a',
+                600: '#52525b',
+                700: '#3f3f46',
+                800: '#27272a',
+                900: '#18181b',
+                950: '#09090b',
+              }
+            }
+          }
+        }
+      }
+    </script>
     <style>
       body {
         font-family: 'Inter', sans-serif;
       }
-      /* Custom scrollbar for webkit */
+      /* Custom scrollbar */
       ::-webkit-scrollbar {
-        width: 8px;
-        height: 8px;
+        width: 6px;
+        height: 6px;
       }
       ::-webkit-scrollbar-track {
-        background: #1e1e1e;
+        background: transparent;
       }
       ::-webkit-scrollbar-thumb {
-        background: #4b5563;
-        border-radius: 4px;
+        background: #e4e4e7;
+        border-radius: 3px;
       }
       ::-webkit-scrollbar-thumb:hover {
-        background: #6b7280;
+        background: #d4d4d8;
+      }
+      .no-scrollbar::-webkit-scrollbar {
+        display: none;
+      }
+      .no-scrollbar {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
       }
     </style>
   <script type="importmap">
@@ -38,7 +74,7 @@
 }
 </script>
 </head>
-  <body class="bg-gray-900 text-white overflow-hidden h-screen">
+  <body class="bg-white text-gray-900 overflow-hidden h-screen font-sans selection:bg-black selection:text-white">
     <div id="root"></div>
   </body>
 </html>
