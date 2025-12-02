@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Sparkles, Image as ImageIcon, RotateCcw, Zap, Command, MessageSquare, Plus } from 'lucide-react';
+import { Sparkles, Image as ImageIcon, RotateCcw, Zap, Command, MessageSquare, Plus, ArrowRight } from 'lucide-react';
 import { ImageUploader } from './components/ImageUploader';
 import { ComparisonView } from './components/ComparisonView';
 import { Button } from './components/Button';
@@ -91,19 +91,24 @@ const App: React.FC = () => {
   }, [prompt]);
 
   return (
-    <div className="flex h-screen bg-white text-gray-900">
+    <div className="flex h-screen bg-white text-gray-900 font-sans">
       {/* Sidebar / Header Area */}
-      <div className="w-72 border-r border-gray-100 bg-white flex flex-col p-6 hidden md:flex">
-        <div className="flex items-center gap-2 mb-10 cursor-pointer group" onClick={handleReset}>
-          <h1 className="font-display font-bold text-2xl tracking-tight group-hover:opacity-80 transition-opacity">cleanshot.</h1>
+      <div className="w-80 border-r border-gray-100 bg-white flex flex-col p-8 hidden md:flex">
+        <div className="flex items-center gap-2 mb-12 cursor-pointer group" onClick={handleReset}>
+          <h1 className="font-display font-bold text-3xl tracking-tight group-hover:opacity-80 transition-opacity">cleanshot.</h1>
         </div>
 
         {appState === AppState.IDLE ? (
-           <div className="flex-1 flex flex-col justify-center text-center text-gray-400 space-y-4">
-              <div className="w-12 h-12 bg-gray-50 rounded-full flex items-center justify-center mx-auto">
-                <Zap className="w-5 h-5 opacity-40" />
+           <div className="flex-1 flex flex-col justify-center text-center text-gray-400 space-y-8">
+              <div className="w-20 h-20 bg-gray-50 rounded-3xl flex items-center justify-center mx-auto border border-gray-100 shadow-sm rotate-3 transition-transform hover:rotate-6 duration-500">
+                <Zap className="w-8 h-8 text-gray-900" />
               </div>
-              <p className="text-sm font-medium">Upload to start editing</p>
+              <div className="space-y-4">
+                  <p className="text-lg font-semibold text-gray-900">Upload to start editing</p>
+                  <p className="text-sm text-gray-500 leading-relaxed max-w-[240px] mx-auto">
+                    CleanShot is an intelligent editor. Remove backgrounds, clean up objects, and enhance photos using simple text prompts.
+                  </p>
+              </div>
            </div>
         ) : (
           <div className="flex-1 flex flex-col min-h-0 animate-fade-in">
@@ -111,35 +116,32 @@ const App: React.FC = () => {
                 <h3 className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-4 flex items-center">
                   Quick Actions
                 </h3>
-                <div className="space-y-1">
+                <div className="space-y-2">
                   {PRESET_PROMPTS.slice(0, 5).map((p, idx) => (
                     <button
                       key={idx}
                       onClick={() => handlePresetClick(p)}
-                      className="w-full text-left px-3 py-2.5 rounded-lg hover:bg-gray-50 text-sm text-gray-600 hover:text-gray-900 transition-all duration-200 truncate group flex items-center justify-between"
+                      className="w-full text-left px-4 py-3 rounded-xl bg-gray-50 hover:bg-gray-100 text-sm text-gray-600 hover:text-gray-900 transition-all duration-200 border border-transparent hover:border-gray-200 group flex items-center justify-between"
                       disabled={loading || appState === AppState.REVIEW}
                     >
-                      <span className="truncate">{p}</span>
-                      <Plus className="w-3 h-3 opacity-0 group-hover:opacity-50" />
+                      <span className="truncate pr-2">{p}</span>
+                      <ArrowRight className="w-3.5 h-3.5 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all text-gray-400" />
                     </button>
                   ))}
                 </div>
              </div>
 
-             <div className="mt-auto">
-               <h3 className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-3">Active Project</h3>
-               <div className="bg-gray-50 rounded-xl p-3 border border-gray-100 flex items-center gap-3">
-                 <div className="w-10 h-10 rounded-lg bg-white overflow-hidden flex-shrink-0 border border-gray-100 shadow-sm">
-                   {currentImage && <img src={currentImage.data} className="w-full h-full object-cover" alt="thumbnail" />}
-                 </div>
-                 <div className="flex-1 min-w-0">
-                   <p className="text-sm font-semibold truncate text-gray-900">Image Layer 1</p>
-                   <p className="text-[10px] text-gray-500 font-medium">Original Source</p>
-                 </div>
-                 <button onClick={handleReset} className="p-1.5 hover:bg-gray-200 rounded-md text-gray-400 hover:text-gray-900 transition-colors">
-                   <RotateCcw className="w-3.5 h-3.5" />
-                 </button>
-               </div>
+             <div className="mt-auto pt-6 border-t border-gray-100">
+               <button 
+                onClick={handleReset}
+                className="w-full flex items-center justify-center gap-2 bg-gray-900 text-white px-4 py-3.5 rounded-xl text-sm font-medium hover:bg-black transition-all shadow-sm hover:shadow-md"
+               >
+                 <RotateCcw className="w-4 h-4" />
+                 Start New Edit
+               </button>
+               <p className="text-[11px] text-center text-red-500 mt-4 font-medium opacity-80">
+                 Save your work! Progress is not stored.
+               </p>
              </div>
           </div>
         )}
@@ -153,12 +155,14 @@ const App: React.FC = () => {
              <span className="font-display font-bold text-xl tracking-tight">cleanshot.</span>
            </div>
            {currentImage && (
-             <button onClick={handleReset} className="text-sm font-medium text-gray-500">New</button>
+             <button onClick={handleReset} className="p-2 text-gray-500 hover:text-gray-900">
+               <RotateCcw className="w-5 h-5" />
+             </button>
            )}
         </div>
 
         {/* Workspace */}
-        <div className="flex-1 relative p-4 md:p-10 flex flex-col min-h-0">
+        <div className="flex-1 relative p-4 md:p-10 flex flex-col min-h-0 bg-white">
           
           {appState === AppState.IDLE && (
             <ImageUploader onImageSelected={handleImageSelected} />
@@ -176,8 +180,8 @@ const App: React.FC = () => {
                   
                   {loading && (
                     <div className="absolute inset-0 flex flex-col items-center justify-center z-10">
-                      <div className="w-12 h-12 border-2 border-gray-200 border-t-black rounded-full animate-spin mb-4"></div>
-                      <p className="text-sm font-medium text-gray-500 animate-pulse">Processing changes...</p>
+                      <div className="w-16 h-16 border-2 border-gray-100 border-t-black rounded-full animate-spin mb-6"></div>
+                      <p className="text-sm font-medium text-gray-900 animate-pulse tracking-wide uppercase text-[10px]">Processing changes...</p>
                     </div>
                   )}
                 </div>
@@ -197,22 +201,22 @@ const App: React.FC = () => {
           {(appState === AppState.EDITING || appState === AppState.PROCESSING) && (
             <div className="w-full max-w-2xl mx-auto z-20">
               {error && (
-                <div className="mb-4 p-3 bg-red-50 border border-red-100 rounded-lg text-red-600 text-sm flex items-center">
+                <div className="mb-4 p-3 bg-red-50 border border-red-100 rounded-xl text-red-600 text-sm flex items-center justify-center">
                    <div className="w-1.5 h-1.5 rounded-full bg-red-500 mr-2"></div>
                    {error}
                 </div>
               )}
               
               <div className="relative group">
-                 <div className="absolute -inset-0.5 bg-gradient-to-r from-gray-200 to-gray-100 rounded-2xl opacity-50 blur transition duration-200 group-hover:opacity-75"></div>
-                 <div className="relative bg-white rounded-xl shadow-lg border border-gray-100 flex flex-col overflow-hidden">
+                 <div className="absolute -inset-1 bg-gradient-to-r from-gray-200 to-gray-100 rounded-2xl opacity-50 blur transition duration-500 group-hover:opacity-75"></div>
+                 <div className="relative bg-white rounded-xl shadow-[0_2px_20px_-10px_rgba(0,0,0,0.1)] border border-gray-200 flex flex-col overflow-hidden">
                     <div className="flex items-end p-2 gap-2">
                         <textarea 
                         ref={textareaRef}
                         value={prompt}
                         onChange={(e) => setPrompt(e.target.value)}
-                        placeholder="Describe your edit..."
-                        className="flex-1 bg-transparent border-none focus:ring-0 resize-none py-3 px-3 text-lg text-gray-900 placeholder-gray-300 font-medium leading-normal outline-none"
+                        placeholder="Describe your edit (e.g., 'Remove the background')"
+                        className="flex-1 bg-transparent border-none focus:ring-0 resize-none py-3.5 px-4 text-lg text-gray-900 placeholder-gray-300 font-medium leading-normal outline-none"
                         rows={1}
                         disabled={loading}
                         onKeyDown={(e) => {
@@ -225,7 +229,7 @@ const App: React.FC = () => {
                         <Button 
                         onClick={handlePromptSubmit} 
                         disabled={!prompt.trim() || loading}
-                        className="mb-1 rounded-lg"
+                        className="mb-1.5 mr-1.5 rounded-lg h-10 px-5"
                         size="md"
                         variant="primary"
                         >
@@ -234,8 +238,8 @@ const App: React.FC = () => {
                     </div>
                  </div>
               </div>
-              <p className="text-center text-[10px] uppercase tracking-widest text-gray-400 mt-4 font-medium">
-                Powered by Gemini 2.5 Flash Image Nano Banana
+              <p className="text-center text-[10px] uppercase tracking-widest text-gray-300 mt-6 font-medium lowercase">
+                powered by gemini 2.5 flash image nano banana
               </p>
             </div>
           )}

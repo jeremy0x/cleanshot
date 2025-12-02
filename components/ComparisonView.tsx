@@ -71,19 +71,19 @@ export const ComparisonView: React.FC<ComparisonViewProps> = ({
 
           {/* Slider Handle */}
           <div
-            className="absolute top-0 bottom-0 w-0.5 bg-white cursor-ew-resize z-10"
+            className="absolute top-0 bottom-0 w-0.5 bg-white cursor-ew-resize z-10 drop-shadow-md"
             style={{ left: `${sliderPosition}%` }}
           >
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-8 h-8 bg-white rounded-full flex items-center justify-center shadow-md border border-gray-100">
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-8 h-8 bg-white rounded-full flex items-center justify-center shadow-lg border border-gray-100 transform transition-transform group-hover:scale-110">
                 <ArrowLeftRight className="w-4 h-4 text-gray-900" />
             </div>
           </div>
           
           {/* Labels */}
-          <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-semibold text-gray-900 border border-gray-100 pointer-events-none shadow-sm">
+          <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm px-3 py-1.5 rounded-lg text-xs font-semibold text-gray-900 border border-gray-200 pointer-events-none shadow-sm z-20">
             Original
           </div>
-          <div className="absolute top-4 right-4 bg-black/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-semibold text-white pointer-events-none shadow-sm">
+          <div className="absolute top-4 right-4 bg-black/90 backdrop-blur-sm px-3 py-1.5 rounded-lg text-xs font-semibold text-white pointer-events-none shadow-sm z-20">
             Edited
           </div>
         </div>
