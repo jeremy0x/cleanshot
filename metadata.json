@@ -1,0 +1,5 @@
+{
+  "name": "cleanshot",
+  "description": "An intelligent image editor powered by Gemini 2.5 Flash Image. Edit photos, remove backgrounds, and enhance product shots using simple natural language prompts.",
+  "requestFramePermissions": []
+}
